@@ -28,29 +28,30 @@ public class ChessGame_Lab3 {
                 continue;
             }
 
-            PieceColor color = null;
+            Colors color = null;
         while (true) {
             System.out.println("Enter color (WHITE, BLACK):");
             String input = scanner.nextLine().trim().toUpperCase();
             try {
-                color = PieceColor.valueOf(input);
-                break; // valid color, exit loop
+                color = Colors.valueOf(input);
+                break;
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid color. Please enter WHITE or BLACK.");
             }
         }
-            Column currentX = null;
+            Columns currentX = null;
             int currentY = 0;
 
             // Loop until valid position
             while (true) {
-                System.out.println("Enter column (a-h):");
+                System.out.println("Enter column (A to H):");
                 char colChar = scanner.nextLine().trim().charAt(0);
-                System.out.println("Enter row (1-8):");
-                currentY = Integer.parseInt(scanner.nextLine().trim());
-                currentX = Column.fromChar(colChar);
+                System.out.println("Enter row (1 to 8):");
+                currentY = scanner.nextInt();
+                scanner.nextLine();
+                currentX = Columns.fromChar(colChar);
 
-                if (ChessBoard.bounds(currentX, currentY)) {
+                if (Chessboard.bounds(currentX, currentY)) {
                     break;
                 } else {
                     System.out.println("Invalid position. Column a-h, row 1-8.");
@@ -64,15 +65,16 @@ public class ChessGame_Lab3 {
         }
 
         // Prompt for target position
-        Column targetX = null;
+        Columns targetX = null;
         int targetY = 0;
         while (true) {
-            System.out.println("Enter target column (a-h):");
+            System.out.println("Enter target column (A to H):");
             char colChar = scanner.nextLine().trim().charAt(0);
-            System.out.println("Enter target row (1-8):");
-            targetY = Integer.parseInt(scanner.nextLine().trim());
-            targetX = Column.fromChar(colChar);
-            if (ChessBoard.bounds(targetX, targetY)) {
+            System.out.println("Enter target row (1 to 8):");
+            targetY = scanner.nextInt();
+            scanner.nextLine();
+            targetX = Columns.fromChar(colChar);
+            if (Chessboard.bounds(targetX, targetY)) {
                 break;
             } else {
                 System.out.println("Invalid position. Column a-h, row 1-8.");
@@ -82,7 +84,7 @@ public class ChessGame_Lab3 {
         // Check moves for each piece using normal for loop
         for (int i = 0; i < givenPieces.length; i++) {
             ChessPiece piece = givenPieces[i];
-            if (piece.verifyMove(targetX, targetY)) {
+            if (piece.validMove(targetX, targetY)) {
                 System.out.println(piece.getName() + " at " + piece.getCurrentX() + ", " + piece.getCurrentY() +
                         " can move to " + targetX + ", " + targetY);
             } else {
@@ -93,9 +95,10 @@ public class ChessGame_Lab3 {
 
         scanner.close();
     }
+}
 
     // Method to create the correct ChessPiece object
-    public static ChessPiece definePiece(String name, PieceColor color, Column x, int y) {
+    public static ChessPiece definePiece(String name, Colors color, Columns x, int y) {
         ChessPiece piece = null;
         switch (name.toLowerCase()) {
             case "pawn":
@@ -134,6 +137,7 @@ public class ChessGame_Lab3 {
             return false;
         }
     }
-}
+
+
 
 }
