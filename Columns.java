@@ -19,6 +19,7 @@ public enum Columns {
 	}
 	
 	public boolean inColumns(char column) {
+		column = Character.toUpperCase(column);
 		for(Columns columns : Columns.values()) {
 			if(columns == Columns.valueOf(String.valueOf(column).toUpperCase())) {
 				return true;
@@ -26,6 +27,17 @@ public enum Columns {
 		}
 		return false;
 	}
+
+	public static Columns fromChar(char column) {
+		column = Character.toUpperCase(column);
+		for (Columns c : Columns.values()) {
+			if (c.getColumn() == column) {
+				return c;
+			}
+		}
+		return null;
+	}
+	
 	
 	@Override
 	public String toString() {
@@ -40,3 +52,4 @@ public enum Columns {
 		}
 		return columns;
 	}
+}
