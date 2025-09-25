@@ -12,9 +12,12 @@ public class ChessGame_Lab3 {
         int counter = 0;
 
         // Initialize available pieces
-        remainingPieces.add("pawn"); remainingPieces.add("rook");
-        remainingPieces.add("knight"); remainingPieces.add("bishop");
-        remainingPieces.add("queen"); remainingPieces.add("king");
+        remainingPieces.add("pawn"); 
+        remainingPieces.add("rook");
+        remainingPieces.add("knight"); 
+        remainingPieces.add("bishop");
+        remainingPieces.add("queen"); 
+        remainingPieces.add("king");
 
         
         while (counter < 6) {
@@ -40,15 +43,15 @@ public class ChessGame_Lab3 {
             Columns currentX = null;
             int currentY = 0;
             while (true) {
-                System.out.println("Enter column (A-H):");
+                System.out.println("Enter column (A to H):");
                 char colChar = scanner.next().trim().toUpperCase().charAt(0);
 
-                System.out.println("Enter row (1-8):");
+                System.out.println("Enter row (1 to 8):");
                 try {
                     currentY = scanner.nextInt();
                     scanner.nextLine();
                 } catch (Exception e) {
-                    System.out.println("Invalid row input. Must be a number 1-8.");
+                    System.out.println("Invalid row input. Must be a number 1 to 8.");
                     scanner.nextLine();
                     continue;
                 }
@@ -57,7 +60,7 @@ public class ChessGame_Lab3 {
                 if (Chessboard.bounds(currentX, currentY)) {
                 break;
                 }
-                System.out.println("Invalid position. Column A-H, row 1-8.");
+                System.out.println("Invalid position. Column A to H, row 1 to 8.");
             }
 
             // Create piece and add to array
@@ -73,22 +76,22 @@ public class ChessGame_Lab3 {
         Columns targetX = null;
         int targetY = 0;
         while (true) {
-            System.out.println("Enter target column (A-H):");
+            System.out.println("Enter target column (A to H):");
             char colChar = scanner.next().trim().toUpperCase().charAt(0);
 
-            System.out.println("Enter target row (1-8):");
+            System.out.println("Enter target row (1 to 8):");
             try {
                 targetY = scanner.nextInt();
                 scanner.nextLine();
             } catch (Exception e) {
-                System.out.println("Invalid row input. Must be a number 1-8.");
+                System.out.println("Invalid row input. Must be a number 1 to 8.");
                 scanner.nextLine(); 
                 continue;
             }
 
             targetX = Columns.fromChar(colChar);
             if (Chessboard.bounds(targetX, targetY)) break;
-            System.out.println("Invalid target position. Column A-H, row 1-8.");
+            System.out.println("Invalid target position. Column A to H, row 1 to 8.");
         }
 
         
