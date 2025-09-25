@@ -11,91 +11,101 @@ public class ChessGame_Lab3 {
         ChessPiece[] givenPieces = new ChessPiece[6];
         int counter = 0;
 
-        // Initialize the set with all pieces
-        remainingPieces.add("pawn");
-        remainingPieces.add("rook");
-        remainingPieces.add("knight");
-        remainingPieces.add("bishop");
-        remainingPieces.add("queen");
-        remainingPieces.add("king");
+        // Initialize available pieces
+        remainingPieces.add("pawn"); remainingPieces.add("rook");
+        remainingPieces.add("knight"); remainingPieces.add("bishop");
+        remainingPieces.add("queen"); remainingPieces.add("king");
 
+        
         while (counter < 6) {
             System.out.println("Enter piece name (Pawn, Rook, Knight, Bishop, Queen, King):");
             String name = scanner.nextLine().trim();
 
-            // Check if the piece has already been selected
-            if (!checkPiece(name)) {
-                continue;
+            // Use your checkPiece method
+            if (!checkPiece(name)) continue;
+
+            // Color input
+            Colors color = null;
+            while (true) {
+                System.out.println("Enter color (WHITE, BLACK):");
+                try {
+                    color = Colors.valueOf(scanner.nextLine().trim().toUpperCase());
+                    break;
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid color. Enter WHITE or BLACK.");
+                }
             }
 
-            Colors color = null;
-        while (true) {
-            System.out.println("Enter color (WHITE, BLACK):");
-            String input = scanner.nextLine().trim().toUpperCase();
-            try {
-                color = Colors.valueOf(input);
-                break;
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid color. Please enter WHITE or BLACK.");
-            }
-        }
+            // Position input
             Columns currentX = null;
             int currentY = 0;
-
-            // Loop until valid position
             while (true) {
-                System.out.println("Enter column (A to H):");
-                char colChar = scanner.nextLine().trim().charAt(0);
-                System.out.println("Enter row (1 to 8):");
-                currentY = scanner.nextInt();
-                scanner.nextLine();
-                currentX = Columns.fromChar(colChar);
+                System.out.println("Enter column (A-H):");
+                char colChar = scanner.next().trim().toUpperCase().charAt(0);
 
-                if (Chessboard.bounds(currentX, currentY)) {
-                    break;
-                } else {
-                    System.out.println("Invalid position. Column a-h, row 1-8.");
+                System.out.println("Enter row (1-8):");
+                try {
+                    currentY = scanner.nextInt();
+                    scanner.nextLine();
+                } catch (Exception e) {
+                    System.out.println("Invalid row input. Must be a number 1-8.");
+                    scanner.nextLine();
+                    continue;
                 }
 
-            // Create the piece using definePiece method
-            ChessPiece piece = definePiece(name, color, currentX, currentY);
+                currentX = Columns.fromChar(colChar);
+                if (Chessboard.bounds(currentX, currentY)) {
+                break;
+                }
+                System.out.println("Invalid position. Column A-H, row 1-8.");
+            }
 
-            givenPieces[counter] = piece;
-            counter++;
+            // Create piece and add to array
+            ChessPiece piece = definePiece(name, color, currentX, currentY);
+            if (piece != null) {
+                givenPieces[counter++] = piece;
+            } else {
+                System.out.println("Invalid piece name, try again.");
+            }
         }
 
-        // Prompt for target position
+        
         Columns targetX = null;
         int targetY = 0;
         while (true) {
-            System.out.println("Enter target column (A to H):");
-            char colChar = scanner.nextLine().trim().charAt(0);
-            System.out.println("Enter target row (1 to 8):");
-            targetY = scanner.nextInt();
-            scanner.nextLine();
-            targetX = Columns.fromChar(colChar);
-            if (Chessboard.bounds(targetX, targetY)) {
-                break;
-            } else {
-                System.out.println("Invalid position. Column a-h, row 1-8.");
+            System.out.println("Enter target column (A-H):");
+            char colChar = scanner.next().trim().toUpperCase().charAt(0);
+
+            System.out.println("Enter target row (1-8):");
+            try {
+                targetY = scanner.nextInt();
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("Invalid row input. Must be a number 1-8.");
+                scanner.nextLine(); 
+                continue;
             }
+
+            targetX = Columns.fromChar(colChar);
+            if (Chessboard.bounds(targetX, targetY)) break;
+            System.out.println("Invalid target position. Column A-H, row 1-8.");
         }
 
-        // Check moves for each piece using normal for loop
-        for (int i = 0; i < givenPieces.length; i++) {
-            ChessPiece piece = givenPieces[i];
-            if (piece.validMove(targetX, targetY)) {
-                System.out.println(piece.getName() + " at " + piece.getCurrentX() + ", " + piece.getCurrentY() +
-                        " can move to " + targetX + ", " + targetY);
-            } else {
-                System.out.println(piece.getName() + " at " + piece.getCurrentX() + ", " + piece.getCurrentY() +
-                        " can NOT move to " + targetX + ", " + targetY);
+        
+        for (ChessPiece piece : givenPieces) {
+            if (piece != null) {
+                if (piece.validMove(targetX, targetY)) {
+                    System.out.println(piece.getName() + " at " + piece.getCurrentX() + ", " +
+                            piece.getCurrentY() + " can move to " + targetX + ", " + targetY);
+                } else {
+                    System.out.println(piece.getName() + " at " + piece.getCurrentX() + ", " +
+                            piece.getCurrentY() + " can NOT move to " + targetX + ", " + targetY);
+                }
             }
         }
 
         scanner.close();
     }
-}
 
     // Method to create the correct ChessPiece object
     public static ChessPiece definePiece(String name, Colors color, Columns x, int y) {
